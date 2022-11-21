@@ -1,0 +1,138 @@
+{
+  "version": 4,
+  "terraform_version": "1.3.5",
+  "serial": 5,
+  "lineage": "6ab057a4-ac3f-ebed-9259-1ae33fa1d4e5",
+  "outputs": {},
+  "resources": [
+    {
+      "module": "module.s3_bucket[\"testing-them-buckets\"]",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "bucket",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": null,
+            "acl": null,
+            "arn": "arn:aws:s3:::testing-them-buckets",
+            "bucket": "testing-them-buckets",
+            "bucket_domain_name": "testing-them-buckets.s3.amazonaws.com",
+            "bucket_prefix": null,
+            "bucket_regional_domain_name": "testing-them-buckets.s3.eu-north-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "secret",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "secret",
+            "id": "testing-them-buckets",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-north-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [],
+            "tags": {
+              "Environment": "dev",
+              "Name": "testing-them-buckets"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "testing-them-buckets"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": false,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "private": "secret"
+        }
+      ]
+    },
+    {
+      "module": "module.s3_bucket[\"testing-them-lists\"]",
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "bucket",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "acceleration_status": null,
+            "acl": null,
+            "arn": "arn:aws:s3:::testing-them-lists",
+            "bucket": "testing-them-lists",
+            "bucket_domain_name": "testing-them-lists.s3.amazonaws.com",
+            "bucket_prefix": null,
+            "bucket_regional_domain_name": "testing-them-lists.s3.eu-north-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "secret",
+                "permissions": [
+                  "FULL_CONTROL"
+                ],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "secret",
+            "id": "testing-them-lists",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "eu-north-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [],
+            "tags": {
+              "Environment": "dev",
+              "Name": "testing-them-lists"
+            },
+            "tags_all": {
+              "Environment": "dev",
+              "Name": "testing-them-lists"
+            },
+            "timeouts": null,
+            "versioning": [
+              {
+                "enabled": false,
+                "mfa_delete": false
+              }
+            ],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_attributes": [],
+          "private": "secret"
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
