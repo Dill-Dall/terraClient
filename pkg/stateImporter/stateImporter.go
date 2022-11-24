@@ -9,7 +9,10 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"regexp"
 	"strconv"
+	"terraClient/pkg/configurationModding"
 
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
@@ -39,7 +42,7 @@ var green = color.New(color.FgGreen, color.Bold)
 var sourceStateDir string
 var destinationStateDir string
 
-func Execute(sourceStateDirInput string, destinationStateDirInput string) {
+func Execute(sourceStateDirInput string, destinationStateDirInput string, updateConfigFile bool, moveConfigFile bool) {
 	green.Printf("\nStarting module importing script for state in %s\nto state in %s", sourceStateDirInput, destinationStateDirInput)
 	sourceStateDir = sourceStateDirInput
 	destinationStateDir = destinationStateDirInput
@@ -58,8 +61,48 @@ func Execute(sourceStateDirInput string, destinationStateDirInput string) {
 	}
 
 	deleteStateModule(selectedModule)
-
 	green.Printf("%s has been successfully imported into state %s from %s\n", selectedModule, destinationStateDir, sourceStateDir)
+
+	if updateConfigFile {
+
+		re := regexp.MustCompile(`\[\"(.*)\"\]`)
+		fileName := filepath.Join("configurations", re.FindStringSubmatch(selectedModule)[1]) + ".hcl"
+
+		var prompt promptContent
+		if moveConfigFile {
+			prompt = promptContent{
+				"Please provide a input.",
+				"Move config file to " + fileName + ":  y\\n",
+			}
+		} else {
+			prompt = promptContent{
+				"Please provide a input.",
+				"Copy config file to " + fileName + ":  y\\n",
+			}
+		}
+
+		definition := promptGetInput(prompt)
+		if definition != "y" {
+			green.Printf("Answer: "+definition, " - Chose not to add config file to state configuration directory.")
+			return
+		}
+
+		if _, err := os.Stat(fileName); err != nil {
+			var pwd string
+			pwd, err = os.Getwd()
+			fmt.Printf("Filename: %v  | was not found from src %v \n %v\n", fileName, pwd, err)
+		}
+
+		if moveConfigFile {
+			configurationModding.ExecuteWithMove(fileName, destinationStateDirInput)
+			green.Printf("Moved file from " + fileName + " to " + destinationStateDir)
+		} else {
+			configurationModding.ExecuteWithCopy(fileName, destinationStateDirInput)
+			green.Printf("Copied file from " + fileName + " to " + destinationStateDir)
+		}
+
+	}
+
 }
 
 func selectModuleFromStateList() string {

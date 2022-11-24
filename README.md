@@ -2,13 +2,13 @@
 
 This client is a wrapper for the terragrunt wrapper. It consist of the following functions:
 
-## importfromto
+## stateImport
 
 Method for importing state in one state directory to another.
 
 ### usage
 
-```
+```bash
 terraClient stateImport --help
 Does import of item from state list in src state into destination state.
         Fetches id for import from state output.
@@ -24,7 +24,7 @@ Flags:
   -s, --src string      folder with terragruntstate to import from
   -u, --update-config   also update config file (default: false)   [ not supported ]
 
-terracli  importfromto  -s "/home/thomas/training/go/terragrunt/two" -d "/home/thomas/training/go/terragrunt/one"
+terracli  stateImport  -s "/home/thomas/training/go/terragrunt/two" -d "/home/thomas/training/go/terragrunt/one"
 ```
 
 ### Why it exists

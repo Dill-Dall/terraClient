@@ -9,7 +9,8 @@ import (
 
 var sourceFolder string
 var destinationFolder string
-var updateConfigFiles bool
+var updateConfigFile bool
+var moveConfigFile bool
 var importCmd = &cobra.Command{
 	Use:   "stateImport",
 	Short: "Does import of state",
@@ -27,7 +28,7 @@ var importCmd = &cobra.Command{
 			return err
 		}
 
-		stateImporter.Execute(sourceFolder, destinationFolder)
+		stateImporter.Execute(sourceFolder, destinationFolder, updateConfigFile, moveConfigFile)
 		return nil
 	},
 }
@@ -35,7 +36,8 @@ var importCmd = &cobra.Command{
 func init() {
 	importCmd.PersistentFlags().StringVarP(&sourceFolder, "src", "s", "", "folder with terragruntstate to import from")
 	importCmd.PersistentFlags().StringVarP(&destinationFolder, "dest", "d", "", "folder with terragruntstate to import to")
-	importCmd.PersistentFlags().BoolVarP(&updateConfigFiles, "update-config", "u", false, "also update config file (default: false)")
+	importCmd.PersistentFlags().BoolVarP(&updateConfigFile, "update-config", "u", false, "also update config file (default: false)")
+	importCmd.PersistentFlags().BoolVarP(&moveConfigFile, "move-config", "m", false, "true: moves config file, fale: cp config file")
 	importCmd.MarkPersistentFlagRequired("src")
 	importCmd.MarkPersistentFlagRequired("dest")
 	rootCmd.AddCommand(importCmd)
