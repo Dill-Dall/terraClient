@@ -24,7 +24,9 @@ Flags:
   -m, --move-config     When --update-config|-u toggled: moves config file, false: cp config file (default:false)
   -s, --src string      folder with terragruntstate to import from
   -u, --update-config   also update config file (default: false)
-terracli  stateImport  -s "/home/thomas/training/go/terragrunt/two" -d "/home/thomas/training/go/terragrunt/one"
+
+
+terracli  stateImport  -s "/home/thomas/training/go/terragrunt/two" -d "/home/thomas/training/go/terragrunt/one" -u -m 
 ```
 
 ### Why it exists
