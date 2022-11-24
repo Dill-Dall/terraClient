@@ -37,7 +37,7 @@ func init() {
 	importCmd.PersistentFlags().StringVarP(&sourceFolder, "src", "s", "", "folder with terragruntstate to import from")
 	importCmd.PersistentFlags().StringVarP(&destinationFolder, "dest", "d", "", "folder with terragruntstate to import to")
 	importCmd.PersistentFlags().BoolVarP(&updateConfigFile, "update-config", "u", false, "also update config file (default: false)")
-	importCmd.PersistentFlags().BoolVarP(&moveConfigFile, "move-config", "m", false, "true: moves config file, fale: cp config file")
+	importCmd.PersistentFlags().BoolVarP(&moveConfigFile, "move-config", "m", false, "When --update-config|-u toggled: moves config file, false: cp config file (default:false)")
 	importCmd.MarkPersistentFlagRequired("src")
 	importCmd.MarkPersistentFlagRequired("dest")
 	rootCmd.AddCommand(importCmd)
