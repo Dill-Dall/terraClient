@@ -24,9 +24,10 @@ type Resources struct {
 		Type      string `json:"type"`
 		Name      string `json:"name"`
 		Instances []struct {
+			Index_key  json.Number `json:"index_key"`
 			Attributes struct {
 				Id string `json:"id"`
-			}
+			} `json:"attributes"`
 		} `json:"instances"`
 	} `json:"resources"`
 }
@@ -60,7 +61,6 @@ func Execute(sourceStateDirInput string, destinationStateDirInput string, update
 		return
 	}
 
-	deleteStateModule(selectedModule)
 	green.Printf("%s has been successfully imported into state %s from %s\n", selectedModule, destinationStateDir, sourceStateDir)
 
 	if updateConfigFile {
@@ -156,23 +156,39 @@ func fetchResourcesInState() Resources {
 		log.Println(string(output))
 		log.Fatal(err)
 	}
+	// Find the index of the first opening curly brace
+	startIndex := bytes.Index(output, []byte("{"))
+
+	// Slice the output to get only the valid JSON portion
+	jsonData := output[startIndex:]
 
 	var resourcesInformation Resources
-	err2 := json.Unmarshal(output, &resourcesInformation)
+	err2 := json.Unmarshal(jsonData, &resourcesInformation)
 	check(err2)
+
 	return resourcesInformation
 }
 
 func check(e error) {
 	if e != nil {
+		log.Println("hello i lugen ")
 		panic(e)
+
 	}
 }
 
 func doImport(resourcesInformation Resources, selectedModule string, destinationStateDir string) bool {
 	var matchFound bool
 	for _, value := range resourcesInformation.ResourcesList {
+
 		moduleArg := value.Module + "." + value.Type + "." + value.Name
+		if value.Instances[0].Index_key != "" {
+			moduleArg += "[" + string(value.Instances[0].Index_key) + "]"
+		}
+
+		fmt.Printf("Selected Module: %s\n", selectedModule)
+		fmt.Printf("Module Argument: %s\n", moduleArg)
+
 		if moduleArg == selectedModule {
 			idArg := value.Instances[0].Attributes.Id
 
@@ -180,8 +196,18 @@ func doImport(resourcesInformation Resources, selectedModule string, destination
 
 			cyan.Printf("\nAt local state directory: %s", destinationStateDir)
 			cyan.Printf("\nCMD: terragrunt import %s %s\n", strconv.Quote(moduleArg), idArg)
-
 			output, err := exec.Command("terragrunt", "import", moduleArg, idArg).CombinedOutput()
+
+			os.Chdir(sourceStateDir)
+
+			cyan.Printf("\nAt local state directory: %s", sourceStateDir)
+			output, err = exec.Command("terragrunt", "state", "rm", selectedModule).CombinedOutput()
+			log.Println(string(output))
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
 			log.Println(string(output))
 
 			if err != nil {
@@ -196,15 +222,8 @@ func doImport(resourcesInformation Resources, selectedModule string, destination
 }
 
 func deleteStateModule(selectedModule string) {
-	err := os.Chdir(sourceStateDir)
-	cyan.Printf("\nAt local state directory: %s\n", sourceStateDir)
 	cyan.Printf("CMD: terragrunt state rm %s ", selectedModule)
-	output, err := exec.Command("terragrunt", "state", "rm", selectedModule).CombinedOutput()
-	log.Println(string(output))
 
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func promptGetInput(pc promptContent) string {
